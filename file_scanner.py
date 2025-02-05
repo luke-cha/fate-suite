@@ -5,7 +5,7 @@ from pathlib import Path
 def scan_files(root_dir='.'):
     """Scan files and organize them by their parent folder name."""
     file_categories = {}
-    target_folders = {'image', 'audio', 'video'}
+    target_folders = {'image', 'audio', 'video', 'hls'}
     
     # Walk through all files in the directory
     for root, _, files in os.walk(root_dir):
@@ -24,6 +24,10 @@ def scan_files(root_dir='.'):
             for file in files:
                 # Skip hidden files and .git directory
                 if file.startswith('.') or '.git' in root:
+                    continue
+                
+                # hls 폴더인 경우 m3u8 파일만 추가
+                if category == 'hls' and not file.lower().endswith('.m3u8'):
                     continue
                 
                 # Get the full path and make it relative to root_dir
